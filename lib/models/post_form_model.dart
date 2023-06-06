@@ -1,24 +1,10 @@
+import 'package:mvc/models/post.dart';
+
 class PostFormModel {
   String? title;
   String? content;
 
   PostFormModel({this.title, this.content});
-
-  void setTitle(String? title) {
-    this.title = title;
-  }
-
-  void setContent(String? content) {
-    this.content = content;
-  }
-
-  String? getTitle() {
-    return title;
-  }
-
-  String?  getContent() {
-    return content;
-  }
 
   bool validateTitle() {
     return title != null && title != '';
@@ -26,6 +12,18 @@ class PostFormModel {
 
   bool validateContent() {
     return content != null && content != '';
+  }
+
+  bool _validateForm() {
+    return validateTitle() && validateContent();
+  }
+
+  Post? createPost() {
+    if(_validateForm()){
+      return new Post(title: title!, content: content!);
+    } else {
+      return null;
+    }
   }
 
 }

@@ -39,7 +39,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<dynamic> openForm(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     final PostFormModel postFormModel = PostFormModel();
 
     return showDialog(
@@ -49,13 +49,13 @@ class _HomeState extends State<Home> {
         return AlertDialog(
           title: const Text("New Post"),
           content: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
               TextFormField(
                 validator: (value) {
-                  postFormModel.setTitle(value);
+                  postFormModel.title = value;
                   if(postFormModel.validateTitle()) {
                     return null;
                   } else {
@@ -66,7 +66,7 @@ class _HomeState extends State<Home> {
               ),
               TextFormField(
                 validator: (value) {
-                  postFormModel.setContent(value);
+                  postFormModel.content = value;
                   if(postFormModel.validateContent()) {
                     return null;
                   } else {
@@ -81,17 +81,19 @@ class _HomeState extends State<Home> {
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
             ),
             TextButton(
               onPressed: () {
-                if(_formKey.currentState!.validate()) {
-                  postController.addPost(postFormModel.getTitle()!, postFormModel.getContent()!);
-                  Navigator.pop(context);
-                  setState(() {});
+                if(formKey.currentState!.validate()) {
+                  if(postFormModel.createPost() != null) {
+                    postController.addPost(postFormModel.createPost()!);
+                    Navigator.pop(context);
+                    setState(() {});
+                  }
                 }
               },
-              child: Text("Add"),
+              child: const Text("Add"),
             ),
           ],
         );

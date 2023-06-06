@@ -3,9 +3,8 @@ import 'package:mvc/models/post.dart';
 class PostController {
   List<Post> posts = [];
 
-  void addPost(String title, String content) {
-    final Post newPost = Post(title: title, content: content);
-    posts.add(newPost);
+  void addPost(Post post) {
+    posts.add(post);
   }
 
   List<Post> getPosts() {
