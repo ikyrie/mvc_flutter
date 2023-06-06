@@ -1,6 +1,7 @@
 class Post {
-  Post({required this.title, required this.content});
-
+  final int? id;
   final String title;
   final String content;
+
+  Post({this.id, required this.title, required this.content});
 }
