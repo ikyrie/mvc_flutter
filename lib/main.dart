@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mvc/data/post_database.dart';
 import 'package:mvc/routes/app_routes.dart';
 import 'package:mvc/views/home.dart';
 import 'package:mvc/views/post_details.dart';
-
-import 'models/post.dart';
 
 void main() {
   runApp(const FaceBeek());
