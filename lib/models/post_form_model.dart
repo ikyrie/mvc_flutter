@@ -20,7 +20,7 @@ class PostFormModel {
 
   Post? createPost() {
     if(_validateForm()){
-      return new Post(title: title!, content: content!);
+      return Post(title: title!, content: content!);
     } else {
       return null;
     }

@@ -8,33 +8,7 @@ import 'models/post.dart';
 
 void main() {
   runApp(const FaceBeek());
-
-  testingSQL();
 }
-
-testingSQL() async {
-  PostDatabase postDatabase = PostDatabase();
-
-  await postDatabase.save(
-    Post(title: "MVC Flutter", content: "Saiu curso novo na Alura!"),
-  );
-
-  await postDatabase.save(
-    Post(
-        title: "Só Love!",
-        content:
-            "Com dois gols de Vagner Love, Sport vence Londrina fora de casa!"),
-  );
-
-  await postDatabase.findAll();
-
-  List<Post> listPost = await postDatabase.findByTitle("MVC Flutter");
-
-  await postDatabase.delete(listPost.first);
-
-  await postDatabase.findAll();
-}
-
 class FaceBeek extends StatelessWidget {
   const FaceBeek({super.key});
 

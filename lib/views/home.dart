@@ -13,11 +13,9 @@ const Home({ Key? key }) : super(key: key);
 
 class _HomeState extends State<Home> {
   final PostController postController = PostController();
-  List<Post> posts = [];
 
   @override
   void initState() {
-    posts = postController.getPosts();
     super.initState();
   }
 
@@ -28,13 +26,32 @@ class _HomeState extends State<Home> {
         child: const Icon(Icons.add),
         onPressed: () => openForm(context),
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: _PostCard(post: Post(title: posts[index].title, content: posts[index].content)),
-        ),
-        itemCount: posts.length,),
+      body: FutureBuilder(
+        future: postController.getPosts(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              break;
+            case ConnectionState.waiting:
+              return const Center(child: CircularProgressIndicator(),);
+            case ConnectionState.active:
+              break;
+            case ConnectionState.done:
+              if(snapshot.hasData) {
+                final List<Post> posts = snapshot.data as List<Post>;
+                
+                return ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: _PostCard(post: Post(id: posts[index].id, title: posts[index].title, content: posts[index].content)),
+                  ),
+                  itemCount: posts.length,);
+              }
+          }
+          return Container();
+        },
+      ),
     ),);
   }
 
@@ -103,7 +120,6 @@ class _HomeState extends State<Home> {
 
 class _PostCard extends StatelessWidget {
   const _PostCard({
-    super.key,
     required this.post,
   });
 

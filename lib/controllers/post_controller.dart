@@ -1,13 +1,16 @@
+import 'package:mvc/data/post_database.dart';
 import 'package:mvc/models/post.dart';
 
 class PostController {
   List<Post> posts = [];
+  final PostDatabase dao = PostDatabase();
 
-  void addPost(Post post) {
-    posts.add(post);
+  void addPost(Post post) async {
+    await dao.save(post);
   }
 
-  List<Post> getPosts() {
+  Future<List<Post>> getPosts() async {
+    posts = await dao.findAll();
     return posts;
   }
 
