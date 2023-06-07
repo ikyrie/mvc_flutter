@@ -11,7 +11,7 @@ class PostDatabase {
   static const String createTableSQL =
       "CREATE TABLE $_tableName($_postId INTEGER NOT NULL PRIMARY KEY, $_title TEXT,$_content TEXT)";
 
-  save(Post post) async {
+  Future<void> save(Post post) async {
     print("SAVE");
 
     Map<String, dynamic> postMap = _toMap(post);
@@ -20,10 +20,10 @@ class PostDatabase {
 
     if (post.id == null) {
       print("CREATING ${post.title}");
-      return await database.insert(_tableName, postMap);
+      await database.insert(_tableName, postMap);
     } else {
       print("UPDATING ${post.title}");
-      return await database.update(
+      await database.update(
         _tableName,
         postMap,
         where: "$_postId = ?",
@@ -67,12 +67,12 @@ class PostDatabase {
     return await _find(_title, title);
   }
 
-  delete(Post post) async {
+  Future<void> delete(Post post) async {
     print("DELETE");
 
     final Database database = await _getDatabase();
 
-    return await database.delete(
+    await database.delete(
       _tableName,
       where: "$_postId = ?",
       whereArgs: [post.id],
