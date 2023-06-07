@@ -19,6 +19,10 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
+  void reloadPage() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context){
     return SafeArea(child: Scaffold(
@@ -44,7 +48,7 @@ class _HomeState extends State<Home> {
                   padding: const EdgeInsets.all(16),
                   itemBuilder: (context, index) => Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: _PostCard(post: Post(id: posts[index].id, title: posts[index].title, content: posts[index].content)),
+                    child: _PostCard(reloadPage: reloadPage, post: Post(id: posts[index].id, title: posts[index].title, content: posts[index].content)),
                   ),
                   itemCount: posts.length,);
               }
@@ -118,27 +122,49 @@ class _HomeState extends State<Home> {
   }
 }
 
-class _PostCard extends StatelessWidget {
+class _PostCard extends StatefulWidget {
   const _PostCard({
     required this.post,
+    required this.reloadPage,
   });
 
   final Post post;
+  final Function reloadPage;
 
   @override
+  State<_PostCard> createState() => _PostCardState();
+}
+
+class _PostCardState extends State<_PostCard> {
+  @override
   Widget build(BuildContext context) {
-    return Card(child: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: Text(post.title, style: Theme.of(context).textTheme.titleLarge,),
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                widget.post.title,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            Text(widget.post.content,
+                style: Theme.of(context).textTheme.bodyMedium,
+                maxLines: 3,
+                overflow: TextOverflow.fade),
+            TextButton(
+              onPressed: () => Navigator.pushNamed(
+                      context, '/postDetails',
+                      arguments: widget.post)
+                  .then((value) => widget.reloadPage()),
+              child: const Text("See all"),
+            )
+          ],
         ),
-        Text(post.content, style: Theme.of(context).textTheme.bodyMedium, maxLines: 3, overflow: TextOverflow.fade),
-        TextButton(onPressed: () => Navigator.pushNamed(context, '/postDetails', arguments: post), child: const Text("See all"),)
-      ],),
-    ),);
+      ),
+    );
   }
 }
